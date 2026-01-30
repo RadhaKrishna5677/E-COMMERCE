@@ -1,16 +1,41 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 export default function Home() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const role=localStorage.getItem("role")
+  const navigate=useNavigate()
   useEffect(() => {
     fetchProducts()
   }, [])
-  function addToCart(id){
-    console.log(id,role)
+
+  function addToCart(productId){
+    console.log(productId,role)
+    const userId=localStorage.getItem("userId")
+    if(!userId){
+      alert("Login first to access the products")
+      return false
+    }
+    axios.post("http://localhost:4000/api/cart/add",
+      {productId, quantity:1}, 
+      {params:{userId}
+    })
+      .then(res=>{
+        if(res.status==200){
+          alert("Product added successfully to cart")
+          navigate("/cart")
+        }
+        else{
+          alert(res.data.message)
+        }
+      })
+      .catch(err=>{
+        console.log("error from add cart logic ",err)
+      })
   }
+
   async function fetchProducts() {
     axios.get("http://localhost:4000/api/product")
       .then((res) => {
