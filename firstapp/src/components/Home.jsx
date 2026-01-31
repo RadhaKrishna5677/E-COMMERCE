@@ -18,7 +18,7 @@ export default function Home() {
       alert("Login first to access the products")
       return false
     }
-    axios.post("http://localhost:4000/api/cart/add",
+    axios.post("https://e-commerce-t0qy.onrender.com/api/cart/add",
       {productId, quantity:1}, 
       {params:{userId}
     })
@@ -37,7 +37,7 @@ export default function Home() {
   }
 
   async function fetchProducts() {
-    axios.get("http://localhost:4000/api/product")
+    axios.get("https://e-commerce-t0qy.onrender.com/api/product")
       .then((res) => {
         console.log(res.data)
         if (res.status == 200) {
